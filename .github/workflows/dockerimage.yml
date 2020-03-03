@@ -23,7 +23,7 @@ jobs:
              
       - name: Tagging
         if: success()
-        run: IMAGE_TAG="`cat VERSION`" && export IMAGE_TAG=${IMAGE_TAG:lastest}
+        run: IMAGE_TAG="`cat VERSION`" && export IMAGE_TAG=${IMAGE_TAG:latest}
 
       - name: Build image
         if: success()
