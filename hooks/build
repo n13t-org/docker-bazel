@@ -1,0 +1,5 @@
+#!/bin/sh
+VERSION=`cat VERSION`
+
+docker build -e VERSION=$VERSION -t $DOCKER_REPO:$VERSION .
+
