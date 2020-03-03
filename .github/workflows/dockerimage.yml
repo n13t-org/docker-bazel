@@ -18,16 +18,17 @@ jobs:
         if: success()
         uses: actions-hub/docker/login@master
         env:
-          DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
              
       - name: Tagging
         if: success()
-        run: IMAGE_TAG=$(cat VERSION) && export IMAGE_TAG=${IMAGE_TAG:lastest}
+        run: IMAGE_TAG="`cat VERSION`" && export IMAGE_TAG=${IMAGE_TAG:lastest}
 
       - name: Build image
         if: success()
+        env:
+          DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
         run: docker build -t ${DOCKER_REPOSITORY}:${IMAGE_TAG} .
 
       - name: Push to docker registry
@@ -35,3 +36,5 @@ jobs:
         uses: actions-hub/docker@master
         with:
           args: push ${DOCKER_REPOSITORY}:${IMAGE_TAG}
+        env:
+          DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
