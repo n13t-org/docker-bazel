@@ -1,7 +1,4 @@
 #!/bin/sh
 VERSION=`cat VERSION`
-
-export IMAGE_NAME=$DOCKER_REPO:$VERSION
-
 docker build --build-arg VERSION=$VERSION -t $IMAGE_NAME .
 
