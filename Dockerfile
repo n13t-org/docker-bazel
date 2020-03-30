@@ -2,11 +2,20 @@ FROM ubuntu:18.04
 
 ARG VERSION
 
-RUN apt update && apt install -y g++ unzip zip curl 
-RUN curl -L https://github.com/bazelbuild/bazel/releases/download/$VERSION/bazel-$VERSION-installer-linux-x86_64.sh -o bazel-installer.sh && ls -la \
-	&& chmod +x bazel-installer.sh \
-	&& ./bazel-installer.sh
+## Bazel
+RUN apt-get update && apt-get install -y g++ unzip zip curl
+RUN export VERSION=$VERSION && \
+    curl -L "https://github.com/bazelbuild/bazel/releases/download/$VERSION/bazel-$VERSION-installer-linux-x86_64.sh" -o bazel-installer.sh && \
+	chmod +x bazel-installer.sh && \
+	./bazel-installer.sh
 
+## Docker
+RUN export VERSION=19.03.8 && \
+    curl -Lcurl -fsSL https://get.docker.com -o get-docker.sh && \
+    sh get-docker.sh
+
+## CLEANUP
+RUN rm -rf /var/cache/apt/archives/*
 
 ##
 # https://docs.bazel.build/versions/master/install-ubuntu.html#step-1-add-bazel-distribution-uri-as-a-package-source
@@ -19,4 +28,3 @@ RUN curl -L https://github.com/bazelbuild/bazel/releases/download/$VERSION/bazel
 #RUN apt-get update && apt full-upgrade -y
 
 ENTRYPOINT /usr/local/bin/bazel
-
